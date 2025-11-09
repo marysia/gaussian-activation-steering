@@ -1,0 +1,44 @@
+model_args:
+  model_name_or_path: "/data/huggingface/models--mistralai--Mistral-7B-Instruct-v0.2/snapshots/3ad372fc79158a2148299e3318516c786aeded6c"
+
+training_args:
+  output_dir: "/data/marysia_winkels/test_repo_dir/lorra"
+  overwrite_output_dir: true
+  max_steps: 70
+  bf16: true
+  per_device_train_batch_size: 16
+  per_device_eval_batch_size: 32
+  gradient_accumulation_steps: 1
+  do_eval: true
+  eval_steps: 10
+  save_total_limit: 0
+  learning_rate: 0.0003
+  weight_decay: 0.0
+  lr_scheduler_type: constant
+  logging_strategy: steps
+  logging_steps: 10
+  tf32: true
+  model_max_length: 128
+  gradient_checkpointing: true
+  report_to:
+    - none
+
+lora_args:
+  lora_r: 8
+  lora_alpha: 16
+  lora_dropout: 0.05
+  lora_target_modules:
+    - q_proj
+    - v_proj
+  lora_bias: none
+  q_lora: false
+
+lorra_args:
+  target_layers: "10,12,14,16,18,20"
+  lorra_alpha: 5
+  lorra_beta: 0
+  max_res_len: 64
+
+dataset:
+  n_samples: 10000
+

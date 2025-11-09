@@ -1,0 +1,13 @@
+# Example configuration for HuggingFaceModelClient
+model_name: "Llama-3.2-1B-Instruct"
+temperature: 0.4
+max_tokens: 1024
+output_format_chat: False
+top_p: None
+top_k: None
+repetition_penalty: None
+control_config:
+  schedule: "gaussian"
+  peak_coeff: 1.0
+  std_dev_factor: 0.2
+control_vector_path: "/data/marysia_winkels/test_repo_dir/control_vectors/Llama-3.2-1B-Instruct.pkl"   # Defaults to CONTROL_VECTOR_PATH/<model_name>.pkl

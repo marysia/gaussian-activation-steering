@@ -1,0 +1,10 @@
+# Example configuration for HuggingFaceModelClient
+model_name: "Llama-3.2-1B-Instruct"
+temperature: 0.4
+max_tokens: 1024
+output_format_chat: False
+top_p: None
+top_k: None
+repetition_penalty: None
+control_config: None
+control_vector_path: None

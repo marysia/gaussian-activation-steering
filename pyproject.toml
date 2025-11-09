@@ -16,7 +16,8 @@
 include = ["gauss_steer*"]
 exclude = ["data*", "venv*"]
 
- [project.scripts]
- train-control-vector = "gauss_steer.control.train_control_vector:main"
+[project.scripts]
+train-control-vector = "gauss_steer.control.train_control_vector:main"
 mask-pipeline = "gauss_steer.mask.pipeline:main"
+train-lorra = "gauss_steer.lorra.train_lorra:main"
 
