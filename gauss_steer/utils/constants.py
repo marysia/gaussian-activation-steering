@@ -5,7 +5,9 @@ DATA_PATH = Path("/data/marysia_winkels/projects/gaussian-activation-steering/da
 CONTROL_VECTOR_PATH = Path(
     "/data/marysia_winkels/test_repo_dir/control_vectors"
 )  # Directory where the control vectors are stored
-
+RESULT_PATH = Path(
+    "/data/marysia_winkels/test_repo_dir/results"
+)  # Directory where the results are stored
 
 # Directory where the huggingface models are stored
 MODEL_BASE_PATH = "/data/huggingface"
@@ -15,3 +17,6 @@ MODEL_BASE_PATH = "/data/huggingface"
 POSITIVE_PERSONAS = ["honest"]
 NEGATIVE_PERSONAS = ["dishonest"]
 TEMPLATE = "Act as if you're extremely {persona}"
+
+### ----- configuration for evaluating the responses ----
+EVALUATION_MODEL_NAME = "models--openai--gpt-oss-20b"

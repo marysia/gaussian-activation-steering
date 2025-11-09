@@ -4,9 +4,13 @@ import json
 import dill as pickle
 
 from gauss_steer.control.extract import ControlVector, DatasetEntry
-from gauss_steer.utils.constants import (CONTROL_VECTOR_PATH, DATA_PATH,
-                                         NEGATIVE_PERSONAS, POSITIVE_PERSONAS,
-                                         TEMPLATE)
+from gauss_steer.utils.constants import (
+    CONTROL_VECTOR_PATH,
+    DATA_PATH,
+    NEGATIVE_PERSONAS,
+    POSITIVE_PERSONAS,
+    TEMPLATE,
+)
 from gauss_steer.utils.prompt_templates import get_prompt_template_func
 from gauss_steer.utils.utils import get_model_and_tokenizer
 

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-import torch
+
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from gauss_steer.utils.constants import MODEL_BASE_PATH
@@ -26,6 +26,7 @@ def get_model_path(model_name):
             f"Base directory '{MODEL_BASE_PATH}' does not exist or is not a directory."
         )
 
+    model_name = model_name.replace("/", "--")
     for d in base_path.iterdir():
         if d.is_dir() and d.name.endswith(model_name):
             # Found the model directory, now look for snapshots
