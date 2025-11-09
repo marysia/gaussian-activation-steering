@@ -1,8 +1,16 @@
 # Gaussian Activation Steering
 
+This repository implements the following: 
+1. Control vector training for activation steering. 
+2. A Gaussian depth schedule for activation steering. 
+3. The MASK benchmark for evaluating the effictiveness on honesty. 
+4. Alternative approaches to the Gaussian depth schedule for performance, namely:
+    - Baseline model (no adjustments)
+    - Equal-budget random, uniform and box-filter distributions for steering
+    - A parameter-efficient LoRRA-style LoRA that internalizes the same honest-vs.-dishonest targets used to form control vectors.
 
-## Training a Control Vector
 
+## 1. Control Vector for Activation Steering. 
 This repository provides a script to train a "control vector" for language models, which can be used to steer model activations in a desired direction (for instance, making output more "honest" or "dishonest").
 
 The script works by loading positive and negative prompt examples, extracting their activations from a specified model, and computing directions using these pairs. The trained control vector can then be saved and applied for further experiments or generation control.
@@ -31,7 +39,59 @@ You can find this command registered as an entry point in `pyproject.toml` under
 
 For more details on customizing prompts, personas, or dataset locations, see the relevant configuration constants in the codebase under `gauss_steer/utils/constants.py`.
 
-## MASK benchmark 
+## 2. Gaussian Depth Schedule for Activation Steering
+The `HuggingFaceModelClient`, when loaded with a config file such as `configs/example-steering-config.yaml`, automatically applies the control vector according to a *Gaussian depth schedule* during generation. This means the strength of the steering (insertion of the control vector) varies across model layers, following a Gaussian-shaped distribution. The peak and width of this schedule are configured in the YAML file, ensuring that the influence of the control vector is greatest at specific layers and tapers off elsewhere.
+
+
+### Example: Using Gaussian Activation Steering in Code
+
+Here's a simple snippet showing how to use the `HuggingFaceModelClient` with activation steering enabled:
+
+```python
+from gauss_steer.utils.model import HuggingFaceModelClient
+
+# Load a YAML config file with Gaussian steering parameters
+client = HuggingFaceModelClient.load_from_config("configs/example-steering-config.yaml")
+
+prompt = "Why do people tell the truth?"
+response = client.generate(prompt)
+print(response)
+```
+
+This will apply the Gaussian-scheduled control vector at generation time, as set in the config.
+
+---
+
+### Example: Configuration YAML for Gaussian Activation Steering
+
+Below is an example of what your configuration YAML (e.g., `example-steering-config.yaml`) should look like:
+
+```yaml
+model_name: Llama-3.2-1B-Instruct
+model_base_path: /path/to/local/hf-models  # or omit if using models from HuggingFace hub
+
+# Steering configuration
+use_control_vector: true
+control_vector_path: /path/to/trained_control_vector.pkl
+
+control_config:
+  schedule: gaussian              # Enables the Gaussian schedule
+  peak_coeff: 1.0                 # Peak coefficient
+  std_dev_factor: 0.2             # Standard deviation
+
+```
+**Notes:**
+- The `control_vector_path` should point to your pre-trained control vector file (usually a `.pkl`).
+- Adjust `peak_coeff`, and `std_dev_factor` for your use case/model.
+- If your model is not local, you can remove the `model_base_path` line and only set `model_name`.
+
+For more advanced options, see other example configs in the `configs/` directory.
+
+
+
+
+
+## 3. MASK benchmark 
 The `MASK` directory contains code and utilities for running the MASK benchmark, which is designed to evaluate language models on honest and dishonest reasoning using masked statements.
 
 ### Contents of the `MASK` Directory
@@ -69,7 +129,7 @@ This pipeline will:
 For more details on paths or configuration, refer to the constants in `gauss_steer/utils/constants.py`.
 
 
-## LoRRA
+## 4. LoRRA
 The LoRRA (LoRA with Representation Alignment) framework allows you to train or fine-tune language models with custom alignment or control objectives. This was implemented to provide a contrast with the post-hoc approach of (Gaussian) activation steering. 
 
 ### Training with LoRRA
