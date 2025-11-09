@@ -1,0 +1,21 @@
+ [build-system]
+ requires = ["setuptools>=68", "wheel"]
+ build-backend = "setuptools.build_meta"
+
+ [project]
+ name = "gaussian-activation-steering"
+ version = "0.1.0"
+ description = "Tools for training and applying Gaussian activation steering control vectors."
+ readme = "README.md"
+ requires-python = ">=3.10"
+ dependencies = [
+     "dill>=0.3.8",
+ ]
+
+[tool.setuptools.packages.find]
+include = ["gauss_steer*"]
+exclude = ["data*", "venv*"]
+
+ [project.scripts]
+ train-control-vector = "gauss_steer.control.train_control_vector:main"
+
