@@ -8,7 +8,7 @@ This repository implements the following:
     - Baseline model (no adjustments)
     - Equal-budget random, uniform and box-filter distributions for steering
     - A parameter-efficient LoRRA-style LoRA that internalizes the same honest-vs.-dishonest targets used to form control vectors.
-
+5. Hyperparameter gridsearch experiment for each approach (Gaussian depth schedule, baseline, equal-budget ablations, LoRRA) to find the best performing model. 
 
 ## 1. Control Vector for Activation Steering. 
 This repository provides a script to train a "control vector" for language models, which can be used to steer model activations in a desired direction (for instance, making output more "honest" or "dishonest").
@@ -129,7 +129,15 @@ This pipeline will:
 For more details on paths or configuration, refer to the constants in `gauss_steer/utils/constants.py`.
 
 
-## 4. LoRRA
+## 4. Alternative appraoches
+### 4.1 Baseline
+The baseline approach directly uses a HuggingFace model (such as Llama-3.2-1B-Instruct) without any form of activation steering or post-hoc modification. This serves as a control condition for evaluating the effectiveness of Gaussian steering and other interventions. To run a baseline on the MASK benchmark, set both `control_vector_path` and `control_config` to `None` in your configuration YAML (see `configs/example-baseline-config.yaml`). The output will reflect the model's behavior on the benchmark with no steering or manipulation applied.
+
+
+### 4.2 Equal-budget ablations 
+Random, uniform, and box-filter distributions are ablation schedules that specify how the control vector is applied across the model layers: "random" assigns the control vector to randomly selected layers, "uniform" spreads it evenly across a specified range, and "box-filter" concentrates the control vector on a fixed block of consecutive layers. These approaches help isolate the impact of steering distribution as compared to the standard Gaussian schedule.
+
+### 3.3 LoRRA
 The LoRRA (LoRA with Representation Alignment) framework allows you to train or fine-tune language models with custom alignment or control objectives. This was implemented to provide a contrast with the post-hoc approach of (Gaussian) activation steering. 
 
 ### Training with LoRRA
