@@ -9,9 +9,10 @@ from gauss_steer.utils.model import HuggingFaceModelClient
 
 
 def pipeline(
-    config_path: str | Path,
+    config: str | Path,
     output_folder: str | Path,
     identifier: str,
+    validation: bool = False,
 ) -> None:
     """
     Pipeline for the MASK benchmark.
@@ -19,8 +20,8 @@ def pipeline(
     output_path = Path(output_folder)
     output_folder = output_path.as_posix()
 
-    client = HuggingFaceModelClient.load_from_config(config_path)
-    generate_responses(client, output_folder, identifier)
+    client = HuggingFaceModelClient.load_from_config(config)
+    generate_responses(client, output_folder, identifier, validation=validation)
     evaluate_responses(output_folder)
     calculate_metrics(output_folder)
     aggregate_metrics(output_folder)
@@ -29,7 +30,7 @@ def pipeline(
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run the MASK benchmark pipeline.")
     parser.add_argument(
-        "--config-path",
+        "--config",
         required=True,
         help="Path to YAML config describing the generation model.",
     )

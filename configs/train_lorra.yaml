@@ -1,8 +1,8 @@
 model_args:
-  model_name_or_path: "/data/huggingface/models--mistralai--Mistral-7B-Instruct-v0.2/snapshots/3ad372fc79158a2148299e3318516c786aeded6c"
+  model_name_or_path: "<MODEL_BASE_PATH>/models--mistralai--Mistral-7B-Instruct-v0.2/snapshots/3ad372fc79158a2148299e3318516c786aeded6c"
 
 training_args:
-  output_dir: "/data/marysia_winkels/test_repo_dir/lorra"
+  output_dir: "lorra"
   overwrite_output_dir: true
   max_steps: 70
   bf16: true
