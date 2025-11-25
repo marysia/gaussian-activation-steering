@@ -10,6 +10,36 @@ This repository implements the following:
     - A parameter-efficient LoRRA-style LoRA that internalizes the same honest-vs.-dishonest targets used to form control vectors.
 5. Hyperparameter gridsearch experiment for each approach (Gaussian depth schedule, baseline, equal-budget ablations, LoRRA) to find the best performing model. 
 
+## Installation 
+To install this package and its dependencies, simply run:
+
+```bash
+pip install .
+```
+
+Make sure you have Python 3.10 or higher.
+
+If you want to install it in editable (development) mode, use:
+
+```bash
+pip install -e .
+```
+
+This will also install all necessary requirements specified in `pyproject.toml`. 
+
+Once installed, the following commands are enabled: 
+```bash
+train-control-vector --model-name <MODEL_NAME>
+```
+
+```bash
+mask-pipeline --model-name <PATH_TO_CONFIG> --output-folder <OUTPUT_FOLDER_NAME> --identifier <FILE_IDENTIFIER> 
+```
+
+```bash
+train-lorra --config-path <CONFIG_PATH> --output-path <OUTPUT_PATH>
+```
+
 ## 1. Control Vector for Activation Steering. 
 This repository provides a script to train a "control vector" for language models, which can be used to steer model activations in a desired direction (for instance, making output more "honest" or "dishonest").
 
@@ -37,7 +67,7 @@ train-control-vector --model-name Llama-3.2-1B-Instruct
 ```
 You can find this command registered as an entry point in `pyproject.toml` under `[project.scripts]`.
 
-For more details on customizing prompts, personas, or dataset locations, see the relevant configuration constants in the codebase under `gauss_steer/utils/constants.py`.
+For more details on customizing prompts, personas, or dataset locations, see the relevant configuration constants in the codebase under `gauss_steer/utils/constants.py`. By default, this will train a control vector for honesty, but by adjusting the constants you can adjust it towards other concepts. 
 
 ## 2. Gaussian Depth Schedule for Activation Steering
 The `HuggingFaceModelClient`, when loaded with a config file such as `configs/example-steering-config.yaml`, automatically applies the control vector according to a *Gaussian depth schedule* during generation. This means the strength of the steering (insertion of the control vector) varies across model layers, following a Gaussian-shaped distribution. The peak and width of this schedule are configured in the YAML file, ensuring that the influence of the control vector is greatest at specific layers and tapers off elsewhere.
